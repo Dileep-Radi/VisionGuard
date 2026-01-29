@@ -3,21 +3,26 @@
 
     <!-- BACKGROUNDS -->
     <color name="bg_main">#0F172A</color>
-    <color name="bg_card">#111827</color>
+    <color name="bg_card">#1E293B</color>
+    <color name="bg_card_hover">#334155</color>
 
     <!-- PRIMARY ACCENT -->
-    <color name="colorPrimary">#38BDF8</color>
-    <color name="colorPrimaryDark">#0284C7</color>
+    <color name="colorPrimary">#06B6D4</color>
+    <color name="colorPrimaryDark">#0891B2</color>
+    <color name="colorSecondary">#8B5CF6</color>
 
     <!-- TEXT -->
-    <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#CBD5E1</color>
+    <color name="text_primary">#F8FAFC</color>
+    <color name="text_secondary">#94A3B8</color>
+    <color name="text_tertiary">#64748B</color>
 
     <!-- STATUS COLORS -->
-    <color name="success">#22C55E</color>
-    <color name="warning">#EF4444</color>
+    <color name="success">#10B981</color>
+    <color name="warning">#F59E0B</color>
+    <color name="error">#EF4444</color>
+    <color name="info">#3B82F6</color>
 
     <!-- DISABLED -->
-    <color name="disabled">#64748B</color>
+    <color name="disabled">#475569</color>
 
 </resources>

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0F172A"
+    android:background="@color/bg_main"
     android:padding="20dp">
 
     <!-- Title -->
@@ -11,11 +11,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="👁️ Blink Challenge"
-        android:textSize="24sp"
-        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp" />
 
     <!-- Instruction -->
     <TextView
@@ -23,59 +23,71 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Blink naturally and relax your eyes"
-        android:textColor="#CBD5E1"
+        android:textColor="@color/text_secondary"
         android:textSize="16sp"
         android:layout_below="@id/tvGameTitle"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp"/>
+        android:layout_marginTop="12dp" />
 
-    <!-- Card -->
+    <!-- Game Card -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:background="#111827"
+        android:background="@drawable/card_background"
         android:padding="24dp"
         android:gravity="center"
         android:elevation="6dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Blinks Detected"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
 
         <TextView
             android:id="@+id/tvBlinkCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
-            android:textSize="48sp"
-            android:textColor="#38BDF8"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Blinks"
-            android:textColor="#94A3B8"
-            android:textSize="16sp"/>
+            android:textSize="60sp"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
 
         <ProgressBar
             android:id="@+id/progressBlink"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="200dp"
-            android:layout_height="10dp"
+            android:layout_height="8dp"
             android:max="10"
             android:progress="0"
-            android:layout_marginTop="20dp"/>
+            android:progressTint="@color/success"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Keep blinking naturally"
+            android:textColor="@color/text_tertiary"
+            android:textSize="12sp"
+            android:layout_marginTop="12dp" />
+
     </LinearLayout>
 
-    <!-- Debug / Status -->
+    <!-- Status -->
     <TextView
         android:id="@+id/tvDebug"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Detecting eyes…"
-        android:textColor="#64748B"
+        android:textColor="@color/text_tertiary"
         android:textSize="12sp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp" />
 
 </RelativeLayout>
