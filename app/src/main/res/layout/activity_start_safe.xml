@@ -5,26 +5,20 @@
     android:layout_height="match_parent">
 
     <Button
-        android:text="Start Safe"
-        android:onClick="startSafe"
+        android:text="YouTube"
+        android:onClick="openYouTube"
         android:layout_width="200dp"
         android:layout_height="wrap_content"/>
 
     <Button
-        android:text="Reports"
-        android:onClick="openReports"
+        android:text="Facebook"
+        android:onClick="openFacebook"
         android:layout_width="200dp"
         android:layout_height="wrap_content"/>
 
     <Button
-        android:text="Settings"
-        android:onClick="openSettings"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"/>
-
-    <Button
-        android:text="Eye Games"
-        android:onClick="openEyeGame"
+        android:text="Instagram"
+        android:onClick="openInstagram"
         android:layout_width="200dp"
         android:layout_height="wrap_content"/>
 

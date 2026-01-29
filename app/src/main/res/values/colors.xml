@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- BACKGROUNDS -->
+    <color name="bg_main">#0F172A</color>
+    <color name="bg_card">#111827</color>
+
+    <!-- PRIMARY ACCENT -->
+    <color name="colorPrimary">#38BDF8</color>
+    <color name="colorPrimaryDark">#0284C7</color>
+
+    <!-- TEXT -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#CBD5E1</color>
+
+    <!-- STATUS COLORS -->
+    <color name="success">#22C55E</color>
+    <color name="warning">#EF4444</color>
+
+    <!-- DISABLED -->
+    <color name="disabled">#64748B</color>
+
+</resources>
