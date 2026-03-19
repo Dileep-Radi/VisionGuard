@@ -101,29 +101,27 @@ class StarCatchActivity : AppCompatActivity() {
     private fun displayStar() {
         instruction.text = "Tap the star!"
         countdownView.text = "3 seconds"
-        star.visibility = android.view.View.VISIBLE
 
+        // Ensure star is visible and properly configured
+        star.visibility = android.view.View.VISIBLE
+        star.text = "⭐"
+        star.textSize = 80f
+        star.alpha = 1f
+        star.scaleX = 1f
+        star.scaleY = 1f
+
+        // Set random position
         val params = star.layoutParams as FrameLayout.LayoutParams
         params.gravity = positions[Random.nextInt(positions.size)]
         star.layoutParams = params
+
+        // Set random color
         star.setTextColor(colors[Random.nextInt(colors.size)])
 
-        // Appear animation
-        star.scaleX = 0.3f
-        star.scaleY = 0.3f
-        star.alpha = 0.5f
-        star.animate()
-            .scaleX(1f)
-            .scaleY(1f)
-            .alpha(1f)
-            .setDuration(300)
-            .withEndAction {
-                // Schedule countdown and disappear
-                handler.postDelayed({ updateCountdown(2) }, 700)
-                handler.postDelayed({ updateCountdown(1) }, 1700)
-                handler.postDelayed({ disappearStar() }, 2700)
-            }
-            .start()
+        // Schedule countdown updates and disappear
+        handler.postDelayed({ updateCountdown(2) }, 1000)
+        handler.postDelayed({ updateCountdown(1) }, 2000)
+        handler.postDelayed({ disappearStar() }, 3000)
     }
 
     private fun updateCountdown(seconds: Int) {
