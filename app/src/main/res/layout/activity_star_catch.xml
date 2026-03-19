@@ -1,78 +1,162 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_main">
+    android:orientation="vertical"
+    android:background="@color/bg_main"
+    android:padding="16dp">
 
-    <!-- Header Bar -->
+    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:background="@color/bg_card"
-        android:padding="12dp"
-        android:gravity="center_vertical"
-        android:layout_gravity="top">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginBottom="20dp">
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Star Catcher"
+            android:textSize="32sp"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Improve Your Eye Tracking"
+            android:textSize="14sp"
+            android:textColor="@color/text_secondary" />
+    </LinearLayout>
+
+    <!-- Round and Score Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
+
+        <!-- Round Counter Card -->
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="⭐ Star Catch"
-            android:textSize="20sp"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:background="@drawable/card_background"
-            android:padding="8dp">
+            android:padding="12dp"
+            android:gravity="center"
+            android:layout_marginEnd="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Score: "
+                android:text="Round"
+                android:textSize="12sp"
                 android:textColor="@color/text_secondary"
-                android:textSize="12sp" />
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tvRound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0/6"
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Score Card -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="@drawable/card_background"
+            android:padding="12dp"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Score"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginBottom="4dp" />
 
             <TextView
                 android:id="@+id/tvScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textColor="@color/success"
-                android:textSize="14sp"
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
-
         </LinearLayout>
-
     </LinearLayout>
 
-    <!-- Game Area -->
-    <LinearLayout
+    <!-- Instruction -->
+    <TextView
+        android:id="@+id/tvInstruction"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="60dp"
+        android:layout_height="wrap_content"
+        android:text="Follow the star with your eyes"
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp"
         android:gravity="center"
-        android:orientation="vertical">
+        android:layout_marginBottom="20dp" />
 
-        <TextView
-            android:id="@+id/tvInstruction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Follow the star with your eyes"
-            android:textColor="@color/text_secondary"
-            android:textSize="16sp"
-            android:layout_marginBottom="32dp" />
+    <!-- Game Area -->
+    <FrameLayout
+        android:id="@+id/gameArea"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/card_background"
+        android:layout_marginBottom="20dp">
 
+        <!-- Star -->
         <TextView
             android:id="@+id/tvStar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="⭐"
-            android:textSize="80sp" />
+            android:textSize="80sp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
 
+    <!-- Countdown Timer -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/card_background"
+        android:padding="16dp"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/tvCountdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ready..."
+            android:textSize="18sp"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold" />
     </LinearLayout>
 
-</FrameLayout>
+    <!-- Start Button -->
+    <Button
+        android:id="@+id/btnStart"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Start Game"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="@drawable/button_primary"
+        android:textColor="@color/bg_main" />
+
+</LinearLayout>
+
