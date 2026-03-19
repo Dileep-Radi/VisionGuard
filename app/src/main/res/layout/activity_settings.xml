@@ -5,152 +5,178 @@
     android:background="@color/bg_main">
 
     <LinearLayout
+        android:id="@+id/main_layout"
         android:orientation="vertical"
-        android:padding="24dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
-        <!-- Header -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="⚙️ Settings"
-            android:textSize="28sp"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:layout_marginBottom="24dp" />
-
-        <!-- Section: Usage Limits -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Usage Limits"
-            android:textSize="16sp"
-            android:textColor="@color/text_primary"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp"
-            android:layout_marginTop="16dp" />
-
-        <EditText
-            android:id="@+id/etMaxTime"
-            android:hint="Max Usage Time (minutes)"
-            android:inputType="number"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/text_tertiary"
-            android:background="@drawable/edit_text_background"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp" />
-
-        <!-- Section: Safe Distance -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Safe Viewing"
-            android:textSize="16sp"
-            android:textColor="@color/text_primary"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp"
-            android:layout_marginTop="20dp" />
-
-        <EditText
-            android:id="@+id/etMinDistance"
-            android:hint="Min Safe Distance (cm)"
-            android:inputType="number"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/text_tertiary"
-            android:background="@drawable/edit_text_background"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp" />
-
-        <EditText
-            android:id="@+id/etWarningTime"
-            android:hint="Warning Duration (seconds)"
-            android:inputType="number"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/text_tertiary"
-            android:background="@drawable/edit_text_background"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:padding="12dp"
-            android:layout_marginBottom="20dp" />
-
-        <!-- Section: Features -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Features"
-            android:textSize="16sp"
-            android:textColor="@color/text_primary"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp"
-            android:layout_marginTop="20dp" />
-
+        <!-- PIN SECTION -->
         <LinearLayout
+            android:id="@+id/pin_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:background="@drawable/card_background"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp">
-
-            <CheckBox
-                android:id="@+id/cbCamera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:buttonTint="@color/colorPrimary" />
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="visible">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Enable Camera Monitoring"
-                android:textColor="@color/text_primary"
-                android:textSize="14sp"
-                android:layout_marginLeft="12dp"
-                android:gravity="center_vertical" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/card_background"
-            android:padding="12dp"
-            android:layout_marginBottom="24dp">
-
-            <CheckBox
-                android:id="@+id/cbUsage"
+                android:id="@+id/pin_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="@color/colorPrimary" />
+                android:text="Enter PIN to Access Settings"
+                android:textSize="18sp"
+                android:textColor="@color/text_primary"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/pin_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="4-Digit PIN"
+                android:inputType="numberPassword"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_secondary"
+                android:backgroundTint="@color/colorPrimary"
+                android:layout_marginBottom="12dp" />
+
+            <Button
+                android:id="@+id/pin_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Unlock"
+                android:background="@drawable/button_primary"
+                android:textColor="@color/bg_main"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
 
             <TextView
-                android:layout_width="0dp"
+                android:id="@+id/pin_message"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Enable Usage Time Monitoring"
-                android:textColor="@color/text_primary"
-                android:textSize="14sp"
-                android:layout_marginLeft="12dp"
-                android:gravity="center_vertical" />
+                android:textColor="@color/warning"
+                android:textSize="12sp" />
+
         </LinearLayout>
 
-        <!-- Save Button -->
-        <Button
-            android:id="@+id/btnSaveSettings"
-            android:text="Save Settings"
-            android:textColor="@color/text_primary"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:background="@drawable/button_primary"
+        <!-- SETTINGS SECTION (Hidden until PIN is correct) -->
+        <LinearLayout
+            android:id="@+id/settings_layout"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="24dp" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- Parental Mode -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/card_background"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+
+                <Switch
+                    android:id="@+id/parental_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🛡️ Enable Parental Mode"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pauses content when device is too close"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <!-- Safe Distance -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/card_background"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📏 Safe Viewing Distance"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp" />
+
+                <Spinner
+                    android:id="@+id/distance_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Recommended: 30cm (12 inches)"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <!-- Screen Time Limit -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/card_background"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⏱️ Daily Screen Time Limit"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp" />
+
+                <Spinner
+                    android:id="@+id/screen_time_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary" />
+            </LinearLayout>
+
+            <!-- Change PIN Button -->
+            <Button
+                android:id="@+id/change_pin_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Change PIN"
+                android:background="@drawable/button_secondary"
+                android:textColor="@color/text_primary"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Save Settings Button -->
+            <Button
+                android:id="@+id/save_settings_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save Settings"
+                android:background="@drawable/button_primary"
+                android:textColor="@color/bg_main"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
     </LinearLayout>
+
 </ScrollView>

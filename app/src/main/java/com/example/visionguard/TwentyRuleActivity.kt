@@ -1,6 +1,5 @@
 package com.example.visionguard
 
-import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
@@ -19,7 +18,8 @@ class TwentyRuleActivity : AppCompatActivity() {
 
     private var timer: CountDownTimer? = null
     private var roundCount = 0
-    private val totalRounds = 3   // user completes 3 eye breaks
+    private val totalRounds = 3
+    private val timerDuration = 20_000L  // 20 seconds
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,68 +31,74 @@ class TwentyRuleActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progressBar)
         btnStart = findViewById(R.id.btnStartTimer)
 
-        tvMessage.text = "👀 Ready to relax your eyes?"
-        tvRound.text = "Round: 0 / $totalRounds"
-
-        btnStart.setOnClickListener {
-            startTimer()
-        }
+        updateRoundDisplay()
+        btnStart.setOnClickListener { startTimer() }
     }
 
-    // ---------------- START TIMER ----------------
+    private fun updateRoundDisplay() {
+        tvRound.text = "Round: $roundCount / $totalRounds"
+    }
+
     private fun startTimer() {
         btnStart.isEnabled = false
         progressBar.progress = 0
-        tvMessage.text = "👁 Look at something 20 feet away"
-        tvMessage.setTextColor(Color.WHITE)
+        tvMessage.text = "Look at something 20 feet away"
 
-        timer = object : CountDownTimer(20_000, 1_000) {
+        timer = object : CountDownTimer(timerDuration, 100) {
 
             override fun onTick(millisUntilFinished: Long) {
-                val seconds = millisUntilFinished / 1000
-                tvTimer.text = "⏳ $seconds sec"
-                progressBar.progress = (20 - seconds).toInt()
+                val seconds = (millisUntilFinished / 1000).toInt()
+                val progress = ((timerDuration - millisUntilFinished) / 1000).toInt()
 
-                // Gentle encouragement
+                // Update timer display
+                tvTimer.text = (seconds + 1).toString()
+                progressBar.progress = progress
+
+                // Motivational messages at key points
                 when (seconds) {
-                    15L -> tvMessage.text = "🙂 Keep going..."
-                    10L -> tvMessage.text = "😌 Relax your eyes"
-                    5L -> tvMessage.text = "✨ Almost done!"
+                    19 -> tvMessage.text = "Great! Keep your focus"
+                    15 -> tvMessage.text = "Steady... relax your eyes"
+                    10 -> tvMessage.text = "Focus on that distant object"
+                    5 -> tvMessage.text = "Almost there... keep looking"
+                    2 -> tvMessage.text = "Final seconds..."
                 }
             }
 
             override fun onFinish() {
                 roundCount++
-                tvTimer.text = "✅ Done!"
-                tvMessage.text = "🎉 Great job! Eyes relaxed"
-                tvMessage.setTextColor(Color.GREEN)
+                tvTimer.text = "✓"
+                tvMessage.text = "Round $roundCount complete! Eyes relaxed"
                 tvRound.text = "Round: $roundCount / $totalRounds"
+                progressBar.progress = 20
 
-                saveBreakCount()
+                saveBreakRecord()
 
                 if (roundCount < totalRounds) {
-                    btnStart.text = "Start Next Round"
+                    btnStart.text = "Start Round ${roundCount + 1}"
                     btnStart.isEnabled = true
                 } else {
-                    finishGame()
+                    finishAllRounds()
                 }
             }
         }.start()
     }
 
-    // ---------------- FINISH GAME ----------------
-    private fun finishGame() {
+    private fun finishAllRounds() {
         btnStart.visibility = View.GONE
         progressBar.visibility = View.GONE
-        tvTimer.text = "🏆"
-        tvTimer.textSize = 48f
-        tvMessage.text =
-            "🎉 Eye Exercise Complete!\nYou followed the 20-20-20 rule"
-        tvMessage.setTextColor(Color.CYAN)
+
+        tvTimer.apply {
+            text = "🎉"
+            textSize = 72f
+        }
+
+        tvMessage.apply {
+            text = "Excellent!\n\nYou completed 3 rounds of the 20-20-20 rule.\nYour eyes are now well relaxed!"
+            textSize = 18f
+        }
     }
 
-    // ---------------- SAVE BREAK DATA ----------------
-    private fun saveBreakCount() {
+    private fun saveBreakRecord() {
         val prefs = getSharedPreferences("VG_PREFS", MODE_PRIVATE)
         val count = prefs.getInt("TAKE_BREAK", 0)
         prefs.edit().putInt("TAKE_BREAK", count + 1).apply()

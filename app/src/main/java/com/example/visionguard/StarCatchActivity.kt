@@ -18,7 +18,6 @@ class StarCatchActivity : AppCompatActivity() {
     private lateinit var roundView: TextView
     private lateinit var countdownView: TextView
     private lateinit var btnStart: Button
-
     private val handler = Handler(Looper.getMainLooper())
 
     private var round = 0
@@ -26,6 +25,25 @@ class StarCatchActivity : AppCompatActivity() {
     private var score = 0
     private var isGameRunning = false
     private var starTouched = false
+
+    // Cached for performance
+    private val positions = intArrayOf(
+        Gravity.TOP or Gravity.START,
+        Gravity.TOP or Gravity.END,
+        Gravity.CENTER_VERTICAL or Gravity.START,
+        Gravity.CENTER_VERTICAL or Gravity.END,
+        Gravity.BOTTOM or Gravity.START,
+        Gravity.BOTTOM or Gravity.END,
+        Gravity.CENTER
+    )
+
+    private val colors = intArrayOf(
+        0xFFD700.toInt(),
+        0x38BDF8.toInt(),
+        0xFF1493.toInt(),
+        0x22C55E.toInt(),
+        0xFFA500.toInt()
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,9 +74,7 @@ class StarCatchActivity : AppCompatActivity() {
         score = 0
         updateUI()
         countdownView.text = "Game Starting..."
-        handler.postDelayed({
-            startRound()
-        }, 500)
+        handler.postDelayed({ startRound() }, 500)
     }
 
     private fun startRound() {
@@ -70,42 +86,27 @@ class StarCatchActivity : AppCompatActivity() {
         round++
         starTouched = false
         updateUI()
-        
-        // Show countdown before star appears
         countdownView.text = "Get Ready..."
         instruction.text = "Round $round of $totalRounds"
-        
-        handler.postDelayed({
-            showCountdown(3)
-        }, 400)
+        handler.postDelayed({ startCountdown() }, 400)
     }
 
-    private fun showCountdown(seconds: Int) {
-        if (seconds == 0) {
-            displayStar()
-            return
-        }
-
-        countdownView.text = seconds.toString()
-        handler.postDelayed({
-            showCountdown(seconds - 1)
-        }, 1000)
+    private fun startCountdown() {
+        countdownView.text = "3"
+        handler.postDelayed({ countdownView.text = "2" }, 1000)
+        handler.postDelayed({ countdownView.text = "1" }, 2000)
+        handler.postDelayed({ displayStar() }, 3000)
     }
 
     private fun displayStar() {
         instruction.text = "Tap the star!"
         countdownView.text = "3 seconds"
-
-        // Make star visible
         star.visibility = android.view.View.VISIBLE
 
-        // Set random position
         val params = star.layoutParams as FrameLayout.LayoutParams
-        params.gravity = randomGravity()
+        params.gravity = positions[Random.nextInt(positions.size)]
         star.layoutParams = params
-
-        // Set random color
-        star.setTextColor(randomColor())
+        star.setTextColor(colors[Random.nextInt(colors.size)])
 
         // Appear animation
         star.scaleX = 0.3f
@@ -116,74 +117,64 @@ class StarCatchActivity : AppCompatActivity() {
             .scaleY(1f)
             .alpha(1f)
             .setDuration(300)
+            .withEndAction {
+                // Schedule countdown and disappear
+                handler.postDelayed({ updateCountdown(2) }, 700)
+                handler.postDelayed({ updateCountdown(1) }, 1700)
+                handler.postDelayed({ disappearStar() }, 2700)
+            }
             .start()
+    }
 
-        // Countdown during star display
-        handler.postDelayed({
-            if (round < totalRounds) {
-                countdownView.text = "2 seconds"
-            }
-        }, 1000)
+    private fun updateCountdown(seconds: Int) {
+        if (round < totalRounds) countdownView.text = "$seconds second${if (seconds > 1) "s" else ""}"
+    }
 
-        handler.postDelayed({
-            if (round < totalRounds) {
-                countdownView.text = "1 second"
-            }
-        }, 2000)
-
-        // Star disappears after 3 seconds
-        handler.postDelayed({
-            if (round < totalRounds && !starTouched) {
-                // Missed the star
+    private fun disappearStar() {
+        if (round < totalRounds) {
+            if (!starTouched) {
                 instruction.text = "Missed! Moving to next..."
                 countdownView.text = "Next round in 2..."
-            } else if (round < totalRounds) {
-                // Already tapped, waiting for next
+            } else {
                 instruction.text = "Great catch! Next in..."
                 countdownView.text = "2 seconds"
             }
-            
-            // Disappear animation
-            star.animate()
-                .scaleX(0.3f)
-                .scaleY(0.3f)
-                .alpha(0.5f)
-                .setDuration(200)
-                .withEndAction {
-                    star.visibility = android.view.View.GONE
-                }
-                .start()
+        }
 
-            // Move to next round after delay
-            handler.postDelayed({
-                startRound()
-            }, 2000)
-        }, 3000)
+        star.animate()
+            .scaleX(0.3f)
+            .scaleY(0.3f)
+            .alpha(0.5f)
+            .setDuration(200)
+            .withEndAction {
+                star.visibility = android.view.View.GONE
+                handler.postDelayed({ startRound() }, 2000)
+            }
+            .start()
     }
 
     private fun onStarTouched() {
         if (!isGameRunning || starTouched || round >= totalRounds) return
-        
+
         starTouched = true
         score++
         updateUI()
-        
-        // Visual feedback
+        instruction.text = "Perfect! +1 point"
+        countdownView.text = "Great!"
+
+        // Visual feedback - chained animation
         star.animate()
             .scaleX(1.3f)
             .scaleY(1.3f)
             .setDuration(150)
+            .withEndAction {
+                star.animate()
+                    .scaleX(0.8f)
+                    .scaleY(0.8f)
+                    .setDuration(150)
+                    .start()
+            }
             .start()
-        
-        star.animate()
-            .scaleX(0.8f)
-            .scaleY(0.8f)
-            .setDuration(150)
-            .setStartDelay(150)
-            .start()
-
-        instruction.text = "Perfect! +1 point"
-        countdownView.text = "Great!"
     }
 
     private fun finishGame() {
@@ -192,50 +183,24 @@ class StarCatchActivity : AppCompatActivity() {
         btnStart.isEnabled = true
 
         instruction.text = "Game Complete!"
-        
-        // Calculate accuracy
         val accuracy = (score * 100) / totalRounds
         countdownView.text = "Score: $score/6 ($accuracy%)"
 
-        // Celebration animation
         star.apply {
             visibility = android.view.View.VISIBLE
             text = "🎉"
             textSize = 80f
+
+            val params = layoutParams as FrameLayout.LayoutParams
+            params.gravity = Gravity.CENTER
+            layoutParams = params
+
             animate()
                 .scaleX(1.2f)
                 .scaleY(1.2f)
                 .setDuration(500)
                 .start()
-            
-            val params = layoutParams as FrameLayout.LayoutParams
-            params.gravity = Gravity.CENTER
-            layoutParams = params
         }
-    }
-
-    private fun randomGravity(): Int {
-        val positions = listOf(
-            Gravity.TOP or Gravity.START,
-            Gravity.TOP or Gravity.END,
-            Gravity.CENTER_VERTICAL or Gravity.START,
-            Gravity.CENTER_VERTICAL or Gravity.END,
-            Gravity.BOTTOM or Gravity.START,
-            Gravity.BOTTOM or Gravity.END,
-            Gravity.CENTER
-        )
-        return positions[Random.nextInt(positions.size)]
-    }
-
-    private fun randomColor(): Int {
-        val colors = listOf(
-            0xFFD700,   // Gold
-            0x38BDF8,   // Cyan
-            0xFF1493,   // Deep Pink
-            0x22C55E,   // Green
-            0xFFA500    // Orange
-        )
-        return colors[Random.nextInt(colors.size)].toInt()
     }
 
     override fun onDestroy() {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/bg_main"
     android:padding="16dp">
 
@@ -11,78 +11,58 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:gravity="center"
         android:layout_marginTop="24dp"
-        android:layout_marginBottom="32dp"
-        android:gravity="center_horizontal">
+        android:layout_marginBottom="40dp">
 
         <TextView
-            android:text="👁️ Eye Games"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimary"
-            android:layout_marginBottom="8dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Eye Games"
+            android:textSize="32sp"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold" />
 
         <TextView
-            android:text="Choose a game to relax your eyes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Strengthen Your Eyes"
             android:textSize="14sp"
             android:textColor="@color/text_secondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
+            android:layout_marginTop="4dp" />
     </LinearLayout>
 
-    <!-- ScrollView for games -->
-    <ScrollView
+    <!-- Game Buttons -->
+    <Button
+        android:id="@+id/btnBlink"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="48dp"
+        android:text="Blink Challenge"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="@drawable/button_primary"
+        android:textColor="@color/bg_main"
+        android:layout_marginBottom="12dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
+    <Button
+        android:id="@+id/btnTwentyRule"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="20-20-20 Rule"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="@drawable/button_primary"
+        android:textColor="@color/bg_main"
+        android:layout_marginBottom="12dp" />
 
-            <!-- Blink Challenge -->
-            <Button
-                android:id="@+id/btnBlink"
-                android:text="😊 Blink Challenge"
-                android:textColor="@color/text_primary"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:background="@drawable/button_primary"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginBottom="12dp" />
-
-            <!-- 20-20-20 Rule -->
-            <Button
-                android:id="@+id/btnTwentyRule"
-                android:text="⏱️ 20-20-20 Rule"
-                android:textColor="@color/text_primary"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:background="@drawable/button_secondary"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginBottom="12dp" />
-
-            <!-- Star Catcher -->
-            <Button
-                android:id="@+id/btnStarCatch"
-                android:text="⭐ Star Catch"
-                android:textColor="@color/text_primary"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:background="@drawable/button_primary"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginBottom="24dp" />
-
-        </LinearLayout>
-
-    </ScrollView>
+    <Button
+        android:id="@+id/btnStarCatch"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Star Catcher"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="@drawable/button_primary"
+        android:textColor="@color/bg_main" />
 
 </LinearLayout>
