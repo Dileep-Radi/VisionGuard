@@ -38,11 +38,7 @@ class StarCatchActivity : AppCompatActivity() {
     )
 
     private val colors = intArrayOf(
-        0xFFD700.toInt(),
-        0x38BDF8.toInt(),
-        0xFF1493.toInt(),
-        0x22C55E.toInt(),
-        0xFFA500.toInt()
+        0x000000.toInt()    // Black
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
