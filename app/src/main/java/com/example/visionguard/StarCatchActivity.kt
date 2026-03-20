@@ -16,7 +16,9 @@ class StarCatchActivity : AppCompatActivity() {
     private lateinit var instruction: TextView
     private lateinit var scoreView: TextView
     private lateinit var roundView: TextView
+    private lateinit var accuracyView: TextView
     private lateinit var countdownView: TextView
+    private lateinit var statusView: TextView
     private lateinit var btnStart: Button
     private val handler = Handler(Looper.getMainLooper())
 
@@ -49,7 +51,9 @@ class StarCatchActivity : AppCompatActivity() {
         instruction = findViewById(R.id.tvInstruction)
         scoreView = findViewById(R.id.tvScore)
         roundView = findViewById(R.id.tvRound)
+        accuracyView = findViewById(R.id.tvAccuracy)
         countdownView = findViewById(R.id.tvCountdown)
+        statusView = findViewById(R.id.tvStatus)
         btnStart = findViewById(R.id.btnStart)
 
         updateUI()
@@ -60,16 +64,20 @@ class StarCatchActivity : AppCompatActivity() {
     private fun updateUI() {
         scoreView.text = score.toString()
         roundView.text = "$round/$totalRounds"
+        val accuracy = if (round > 0) (score * 100) / round else 0
+        accuracyView.text = "$accuracy%"
     }
 
     private fun startGame() {
         if (isGameRunning) return
         isGameRunning = true
         btnStart.isEnabled = false
+        btnStart.text = "Game Running..."
         round = 0
         score = 0
         updateUI()
-        countdownView.text = "Game Starting..."
+        countdownView.text = "Starting..."
+        statusView.text = "Get ready!"
         handler.postDelayed({ startRound() }, 500)
     }
 
@@ -83,12 +91,13 @@ class StarCatchActivity : AppCompatActivity() {
         starTouched = false
         updateUI()
         countdownView.text = "Get Ready..."
-        instruction.text = "Round $round of $totalRounds"
+        statusView.text = "Round $round of $totalRounds"
         handler.postDelayed({ startCountdown() }, 400)
     }
 
     private fun startCountdown() {
         countdownView.text = "3"
+        statusView.text = ""
         handler.postDelayed({ countdownView.text = "2" }, 1000)
         handler.postDelayed({ countdownView.text = "1" }, 2000)
         handler.postDelayed({ displayStar() }, 3000)
@@ -96,7 +105,7 @@ class StarCatchActivity : AppCompatActivity() {
 
     private fun displayStar() {
         instruction.text = "Tap the star!"
-        countdownView.text = "3 seconds"
+        countdownView.text = "3"
 
         // Set random position first
         val params = star.layoutParams as FrameLayout.LayoutParams
@@ -115,6 +124,8 @@ class StarCatchActivity : AppCompatActivity() {
         star.visibility = android.view.View.VISIBLE
         star.requestLayout()
 
+        statusView.text = "TAP the star!"
+
         // Schedule countdown updates and disappear
         handler.postDelayed({ updateCountdown(2) }, 1000)
         handler.postDelayed({ updateCountdown(1) }, 2000)
@@ -122,17 +133,19 @@ class StarCatchActivity : AppCompatActivity() {
     }
 
     private fun updateCountdown(seconds: Int) {
-        if (round < totalRounds) countdownView.text = "$seconds second${if (seconds > 1) "s" else ""}"
+        if (round < totalRounds) countdownView.text = seconds.toString()
     }
 
     private fun disappearStar() {
         if (round < totalRounds) {
             if (!starTouched) {
-                instruction.text = "Missed! Moving to next..."
-                countdownView.text = "Next round in 2..."
+                instruction.text = "Missed!"
+                countdownView.text = "Missed"
+                statusView.text = "Move to next round..."
             } else {
-                instruction.text = "Great catch! Next in..."
-                countdownView.text = "2 seconds"
+                instruction.text = "Great catch!"
+                countdownView.text = "Got it!"
+                statusView.text = "Nice! Moving to next..."
             }
         }
 
@@ -143,7 +156,7 @@ class StarCatchActivity : AppCompatActivity() {
             .setDuration(200)
             .withEndAction {
                 star.visibility = android.view.View.GONE
-                handler.postDelayed({ startRound() }, 2000)
+                handler.postDelayed({ startRound() }, 1500)
             }
             .start()
     }
@@ -154,19 +167,19 @@ class StarCatchActivity : AppCompatActivity() {
         starTouched = true
         score++
         updateUI()
-        instruction.text = "Perfect! +1 point"
-        countdownView.text = "Great!"
+        instruction.text = "Perfect hit! ✓"
+        statusView.text = "+1 Point"
 
-        // Visual feedback - chained animation
+        // Visual feedback - scale up and down
         star.animate()
-            .scaleX(1.3f)
-            .scaleY(1.3f)
-            .setDuration(150)
+            .scaleX(1.4f)
+            .scaleY(1.4f)
+            .setDuration(120)
             .withEndAction {
                 star.animate()
-                    .scaleX(0.8f)
-                    .scaleY(0.8f)
-                    .setDuration(150)
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(120)
                     .start()
             }
             .start()
@@ -179,7 +192,8 @@ class StarCatchActivity : AppCompatActivity() {
 
         instruction.text = "Game Complete!"
         val accuracy = (score * 100) / totalRounds
-        countdownView.text = "Score: $score/6 ($accuracy%)"
+        countdownView.text = "Score: $score/6"
+        statusView.text = "Accuracy: $accuracy%"
 
         star.apply {
             visibility = android.view.View.VISIBLE
@@ -191,9 +205,9 @@ class StarCatchActivity : AppCompatActivity() {
             layoutParams = params
 
             animate()
-                .scaleX(1.2f)
-                .scaleY(1.2f)
-                .setDuration(500)
+                .scaleX(1.3f)
+                .scaleY(1.3f)
+                .setDuration(600)
                 .start()
         }
     }
