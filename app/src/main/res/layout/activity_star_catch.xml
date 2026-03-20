@@ -12,12 +12,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_marginBottom="24dp">
+        android:layout_marginBottom="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Star Catcher"
+            android:text="Star Maze"
             android:textSize="32sp"
             android:textColor="@color/text_primary"
             android:textStyle="bold"
@@ -26,178 +26,203 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tap the star quickly to improve eye tracking"
+            android:text="Navigate the maze to find the star"
             android:textSize="13sp"
             android:textColor="@color/text_secondary" />
     </LinearLayout>
 
-    <!-- Stats Row: Round and Score -->
+    <!-- Stats Row -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="12dp">
 
-        <!-- Round Card -->
+        <!-- Time Card -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
             android:background="@drawable/card_background"
-            android:padding="14dp"
+            android:padding="12dp"
             android:gravity="center"
-            android:layout_marginEnd="8dp">
+            android:layout_marginEnd="6dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Round"
-                android:textSize="11sp"
+                android:text="Time"
+                android:textSize="10sp"
                 android:textColor="@color/text_secondary"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="4dp" />
 
             <TextView
-                android:id="@+id/tvRound"
+                android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0/6"
-                android:textSize="22sp"
+                android:text="0s"
+                android:textSize="20sp"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Score Card -->
+        <!-- Moves Card -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
             android:background="@drawable/card_background"
-            android:padding="14dp"
+            android:padding="12dp"
             android:gravity="center"
-            android:layout_marginEnd="8dp">
+            android:layout_marginEnd="6dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Score"
-                android:textSize="11sp"
+                android:text="Moves"
+                android:textSize="10sp"
                 android:textColor="@color/text_secondary"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="4dp" />
 
             <TextView
-                android:id="@+id/tvScore"
+                android:id="@+id/tvMoves"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Accuracy Card -->
+        <!-- Status Card -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
             android:background="@drawable/card_background"
-            android:padding="14dp"
+            android:padding="12dp"
             android:gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Accuracy"
-                android:textSize="11sp"
+                android:text="Status"
+                android:textSize="10sp"
                 android:textColor="@color/text_secondary"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="4dp" />
 
             <TextView
-                android:id="@+id/tvAccuracy"
+                android:id="@+id/tvStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0%"
-                android:textSize="22sp"
+                android:text="Ready"
+                android:textSize="14sp"
                 android:textColor="@color/colorPrimary"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:gravity="center" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Instruction Text -->
-    <TextView
-        android:id="@+id/tvInstruction"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Follow the star with your eyes"
-        android:textColor="@color/text_primary"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginBottom="16dp" />
-
-    <!-- Game Area -->
+    <!-- Maze Canvas -->
     <FrameLayout
-        android:id="@+id/gameArea"
+        android:id="@+id/mazeContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@drawable/card_background"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="12dp">
 
-        <!-- Star -->
-        <TextView
-            android:id="@+id/tvStar"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:text="⭐"
-            android:textSize="80sp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:visibility="gone" />
+        <com.example.visionguard.MazeView
+            android:id="@+id/mazeView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </FrameLayout>
 
-    <!-- Countdown and Status Card -->
+    <!-- Instructions -->
+    <TextView
+        android:id="@+id/tvInstruction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Use arrow buttons to navigate through the maze and find the star ⭐"
+        android:textSize="12sp"
+        android:textColor="@color/text_secondary"
+        android:gravity="center"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Controls -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/card_background"
-        android:padding="20dp"
-        android:gravity="center"
-        android:layout_marginBottom="16dp">
+        android:gravity="center">
 
-        <TextView
-            android:id="@+id/tvCountdown"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ready..."
-            android:textSize="28sp"
-            android:textColor="@color/colorPrimary"
+        <!-- Up Button -->
+        <Button
+            android:id="@+id/btnUp"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:text="↑"
+            android:textSize="24sp"
             android:textStyle="bold"
+            android:background="@drawable/button_primary"
+            android:textColor="@color/bg_main"
             android:layout_marginBottom="8dp" />
 
-        <TextView
-            android:id="@+id/tvStatus"
+        <!-- Left, Down, Right Row -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Press Start to begin"
-            android:textSize="13sp"
-            android:textColor="@color/text_secondary"
-            android:gravity="center" />
-    </LinearLayout>
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="8dp">
 
-    <!-- Start Button -->
-    <Button
-        android:id="@+id/btnStart"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Start Game"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:background="@drawable/button_primary"
-        android:textColor="@color/bg_main" />
+            <Button
+                android:id="@+id/btnLeft"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="←"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:background="@drawable/button_primary"
+                android:textColor="@color/bg_main"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/btnDown"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="↓"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:background="@drawable/button_primary"
+                android:textColor="@color/bg_main"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/btnRight"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="→"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:background="@drawable/button_primary"
+                android:textColor="@color/bg_main" />
+        </LinearLayout>
+
+        <!-- Start Button -->
+        <Button
+            android:id="@+id/btnStart"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Start Maze"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:background="@drawable/button_primary"
+            android:textColor="@color/bg_main" />
+    </LinearLayout>
 
 </LinearLayout>
 
