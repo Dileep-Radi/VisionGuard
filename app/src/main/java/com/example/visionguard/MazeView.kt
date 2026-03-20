@@ -17,24 +17,29 @@ class MazeView(context: Context, attrs: AttributeSet? = null) : View(context, at
     private var starY = 9
 
     private val wallPaint = Paint().apply {
-        color = 0xFF64748B.toInt()
-        strokeWidth = 4f
-        style = Paint.Style.STROKE
-    }
-
-    private val pathPaint = Paint().apply {
-        color = 0xFFFAFAFA.toInt()
+        color = 0xFF475569.toInt()  // Dark slate gray
         style = Paint.Style.FILL
     }
 
+    private val pathPaint = Paint().apply {
+        color = 0xFFFFFFFF.toInt()  // White
+        style = Paint.Style.FILL
+    }
+
+    private val borderPaint = Paint().apply {
+        color = 0xFF94A3B8.toInt()  // Light gray border
+        strokeWidth = 2f
+        style = Paint.Style.STROKE
+    }
+
     private val playerPaint = Paint().apply {
-        color = 0xFF38BDF8.toInt()
+        color = 0xFF38BDF8.toInt()  // Cyan
         style = Paint.Style.FILL
     }
 
     private val starPaint = Paint().apply {
         color = 0xFF000000.toInt()
-        textSize = 24f
+        textSize = 32f
         textAlign = Paint.Align.CENTER
     }
 
@@ -45,7 +50,7 @@ class MazeView(context: Context, attrs: AttributeSet? = null) : View(context, at
     }
 
     private fun generateMaze() {
-        // Create a simple maze pattern
+        // Create a simple maze pattern with clear paths
         for (i in 0 until 10) {
             for (j in 0 until 10) {
                 maze[i][j] = if ((i + j) % 3 == 0) 1 else 0 // 1 = wall, 0 = path
@@ -60,12 +65,22 @@ class MazeView(context: Context, attrs: AttributeSet? = null) : View(context, at
         starX = 9
         starY = 9
 
-        // Create a few open paths
+        // Create clear horizontal and vertical corridors
         for (i in 0..9) {
             maze[i][1] = 0
             maze[1][i] = 0
             maze[i][5] = 0
             maze[5][i] = 0
+            maze[i][9] = 0
+            maze[9][i] = 0
+        }
+
+        // Add some additional paths for variety
+        for (i in 3..7) {
+            maze[i][3] = 0
+            maze[3][i] = 0
+            maze[i][7] = 0
+            maze[7][i] = 0
         }
     }
 
@@ -102,25 +117,37 @@ class MazeView(context: Context, attrs: AttributeSet? = null) : View(context, at
             for (j in 0 until 10) {
                 val left = paddingLeft + i * cellSize
                 val top = paddingTop + j * cellSize
+                val right = left + cellSize
+                val bottom = top + cellSize
 
                 if (maze[i][j] == 1) {
-                    // Draw wall
-                    canvas.drawRect(left, top, left + cellSize, top + cellSize, wallPaint)
+                    // Draw wall - dark filled rectangle
+                    canvas.drawRect(left + 1, top + 1, right - 1, bottom - 1, wallPaint)
+                    canvas.drawRect(left + 1, top + 1, right - 1, bottom - 1, borderPaint)
                 } else {
-                    // Draw path
-                    canvas.drawRect(left + 2, top + 2, left + cellSize - 2, top + cellSize - 2, pathPaint)
+                    // Draw path - white filled rectangle with border
+                    canvas.drawRect(left + 1, top + 1, right - 1, bottom - 1, pathPaint)
+                    canvas.drawRect(left + 1, top + 1, right - 1, bottom - 1, borderPaint)
                 }
             }
         }
 
         // Draw star
         val starLeft = paddingLeft + starX * cellSize + cellSize / 2
-        val starTop = paddingTop + starY * cellSize + cellSize / 2
-        canvas.drawText("⭐", starLeft, starTop + 8, starPaint)
+        val starTop = paddingTop + starY * cellSize + cellSize / 2 + 12
+        canvas.drawText("⭐", starLeft, starTop, starPaint)
 
-        // Draw player
+        // Draw player - larger cyan circle
         val playerLeft = paddingLeft + playerX * cellSize + cellSize / 2
         val playerTop = paddingTop + playerY * cellSize + cellSize / 2
-        canvas.drawCircle(playerLeft, playerTop, cellSize / 4, playerPaint)
+        canvas.drawCircle(playerLeft, playerTop, cellSize / 3, playerPaint)
+
+        // Add white border to player for better visibility
+        val playerBorder = Paint().apply {
+            color = 0xFFFFFFFF.toInt()
+            strokeWidth = 2f
+            style = Paint.Style.STROKE
+        }
+        canvas.drawCircle(playerLeft, playerTop, cellSize / 3, playerBorder)
     }
 }
