@@ -56,6 +56,14 @@ class StarCatchActivity : AppCompatActivity() {
         statusView = findViewById(R.id.tvStatus)
         btnStart = findViewById(R.id.btnStart)
 
+        // Initialize star properties
+        star.text = "⭐"
+        star.textSize = 80f
+        star.setTextColor(0xFF000000.toInt())
+        star.alpha = 1f
+        star.scaleX = 1f
+        star.scaleY = 1f
+
         updateUI()
         btnStart.setOnClickListener { startGame() }
         star.setOnClickListener { onStarTouched() }
@@ -112,19 +120,20 @@ class StarCatchActivity : AppCompatActivity() {
         params.gravity = positions[Random.nextInt(positions.size)]
         star.layoutParams = params
 
-        // Configure star appearance
+        // Configure star appearance BEFORE making visible
         star.text = "⭐"
         star.textSize = 80f
         star.alpha = 1f
         star.scaleX = 1f
         star.scaleY = 1f
-        star.setTextColor(colors[Random.nextInt(colors.size)])
-
-        // Make visible and request layout update
-        star.visibility = android.view.View.VISIBLE
-        star.requestLayout()
+        star.setTextColor(0xFF000000.toInt())
 
         statusView.text = "TAP the star!"
+
+        // Ensure visibility and layout are processed
+        star.visibility = android.view.View.VISIBLE
+        star.invalidate()
+        star.requestLayout()
 
         // Schedule countdown updates and disappear
         handler.postDelayed({ updateCountdown(2) }, 1000)
