@@ -34,6 +34,9 @@ class SafeBrowserActivity : AppCompatActivity() {
     private var parentalMode = false
     private var safeDistance = 30
 
+    // Tracking state to avoid multiple reports for a single continuous unsafe event
+    private var isCurrentlyUnsafe = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -64,7 +67,7 @@ class SafeBrowserActivity : AppCompatActivity() {
         }
 
         warningOverlay = TextView(this).apply {
-            text = "⚠️ Hold the phone farther away"
+            text = "Please move the phone away from your eyes"
             textSize = 22f
             gravity = Gravity.CENTER
             setTextColor(0xFFFFFFFF.toInt())
@@ -138,11 +141,19 @@ class SafeBrowserActivity : AppCompatActivity() {
 
                                 if (distance < safeDistance) {
                                     runOnUiThread {
-                                        handleUnsafe()
+                                        if (!isCurrentlyUnsafe) {
+                                            isCurrentlyUnsafe = true
+                                            handleUnsafe()
+                                        }
                                     }
                                 } else {
                                     runOnUiThread {
-                                        handleSafe()
+                                        if (isCurrentlyUnsafe) {
+                                            isCurrentlyUnsafe = false
+                                            handleSafe()
+                                        } else {
+                                            handleSafe()
+                                        }
                                     }
                                 }
                             } else {

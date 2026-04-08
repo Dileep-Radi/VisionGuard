@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 class StarCatchActivity : AppCompatActivity() {
 
     private lateinit var mazeView: MazeView
+    private lateinit var tvLevel: TextView
     private lateinit var tvTime: TextView
     private lateinit var tvMoves: TextView
     private lateinit var tvStatus: TextView
@@ -20,6 +21,7 @@ class StarCatchActivity : AppCompatActivity() {
     private lateinit var btnRight: Button
 
     private var isGameRunning = false
+    private var currentLevel = 1
     private var moves = 0
     private var elapsedSeconds = 0
     private val handler = Handler(Looper.getMainLooper())
@@ -29,6 +31,7 @@ class StarCatchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_star_catch)
 
         mazeView = findViewById(R.id.mazeView)
+        tvLevel = findViewById(R.id.tvLevel)
         tvTime = findViewById(R.id.tvTime)
         tvMoves = findViewById(R.id.tvMoves)
         tvStatus = findViewById(R.id.tvStatus)
@@ -54,8 +57,9 @@ class StarCatchActivity : AppCompatActivity() {
         moves = 0
         elapsedSeconds = 0
         btnStart.isEnabled = false
-        btnStart.text = "Game Running..."
+        btnStart.text = "Level $currentLevel"
 
+        mazeView.generateMaze(currentLevel)
         mazeView.reset()
         tvStatus.text = "Find the star!"
         tvMoves.text = "0"
@@ -73,7 +77,7 @@ class StarCatchActivity : AppCompatActivity() {
 
             // Check if star is found
             if (mazeView.isStarFound()) {
-                finishGame()
+                finishLevel()
             }
         }
     }
@@ -90,28 +94,35 @@ class StarCatchActivity : AppCompatActivity() {
         }, 1000)
     }
 
-    private fun finishGame() {
+    private fun finishLevel() {
         isGameRunning = false
-        btnStart.isEnabled = true
-        btnStart.text = "Play Again"
+        handler.removeCallbacksAndMessages(null)
 
         val rating = when {
-            moves <= 20 -> "Perfect! 🌟"
-            moves <= 30 -> "Great! ✓"
-            moves <= 40 -> "Good"
-            else -> "Keep Trying"
+            currentLevel == 1 && moves <= 15 -> "Perfect! 🌟"
+            currentLevel <= 3 && moves <= 20 -> "Great! ✓"
+            currentLevel <= 5 && moves <= 30 -> "Good!"
+            else -> "Nice!"
         }
 
-        tvStatus.text = rating
+        tvStatus.text = "$rating Next Level →"
 
-        // Show celebration
-        mazeView.invalidate()
+        // Auto progress to next level after delay
+        handler.postDelayed({
+            currentLevel++
+            tvLevel.text = currentLevel.toString()
+            btnStart.text = "Next Level"
+            btnStart.isEnabled = true
+            startGame()
+        }, 1500)
     }
 
     private fun updateUI() {
+        tvLevel.text = currentLevel.toString()
         tvTime.text = "0s"
         tvMoves.text = "0"
         tvStatus.text = "Ready"
+        btnStart.text = "Start Level $currentLevel"
     }
 
     override fun onDestroy() {

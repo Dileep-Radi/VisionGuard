@@ -38,6 +38,35 @@
         android:orientation="horizontal"
         android:layout_marginBottom="12dp">
 
+        <!-- Level Card -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="@drawable/card_background"
+            android:padding="12dp"
+            android:gravity="center"
+            android:layout_marginEnd="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Level"
+                android:textSize="10sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tvLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+        </LinearLayout>
+
         <!-- Time Card -->
         <LinearLayout
             android:layout_width="0dp"
@@ -119,7 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ready"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
                 android:gravity="center" />

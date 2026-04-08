@@ -2,7 +2,6 @@ package com.example.visionguard
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
@@ -10,11 +9,14 @@ import kotlin.random.Random
 
 class MazeView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
-    private val maze = Array(10) { IntArray(10) }
-    private var playerX = 0
-    private var playerY = 0
-    private var starX = 9
-    private var starY = 9
+    // Using an odd dimension for a true Perfect DFS Maze. 9x9 is small, guaranteeing big visual blocks.
+    private val MAZE_SIZE = 9
+    private val maze = Array(MAZE_SIZE) { IntArray(MAZE_SIZE) }
+    private var playerX = 1
+    private var playerY = 1
+    private var starX = MAZE_SIZE - 2
+    private var starY = MAZE_SIZE - 2
+    private var level = 1
 
     private val wallPaint = Paint().apply {
         color = 0xFF475569.toInt()  // Dark slate gray
@@ -39,54 +41,66 @@ class MazeView(context: Context, attrs: AttributeSet? = null) : View(context, at
 
     private val starPaint = Paint().apply {
         color = 0xFF000000.toInt()
-        textSize = 32f
         textAlign = Paint.Align.CENTER
+    }
+
+    private val playerBorder = Paint().apply {
+        color = 0xFFFFFFFF.toInt()
+        strokeWidth = 3f
+        style = Paint.Style.STROKE
     }
 
     private var cellSize = 40f
 
     init {
-        generateMaze()
+        generateMaze(1)
     }
 
-    private fun generateMaze() {
-        // Create a simple maze pattern with clear paths
-        for (i in 0 until 10) {
-            for (j in 0 until 10) {
-                maze[i][j] = if ((i + j) % 3 == 0) 1 else 0 // 1 = wall, 0 = path
+    fun generateMaze(newLevel: Int) {
+        level = newLevel
+
+        // Initialize maze with all walls
+        for (i in 0 until MAZE_SIZE) {
+            for (j in 0 until MAZE_SIZE) {
+                maze[i][j] = 1  // 1 = wall
             }
         }
 
-        // Ensure start and end are paths
-        maze[0][0] = 0
-        maze[9][9] = 0
-        playerX = 0
-        playerY = 0
-        starX = 9
-        starY = 9
+        // Start properties
+        playerX = 1
+        playerY = 1
+        starX = MAZE_SIZE - 2
+        starY = MAZE_SIZE - 2
 
-        // Create clear horizontal and vertical corridors
-        for (i in 0..9) {
-            maze[i][1] = 0
-            maze[1][i] = 0
-            maze[i][5] = 0
-            maze[5][i] = 0
-            maze[i][9] = 0
-            maze[9][i] = 0
-        }
+        val random = Random(System.currentTimeMillis())
+        carveMazeDFS(1, 1, random)
 
-        // Add some additional paths for variety
-        for (i in 3..7) {
-            maze[i][3] = 0
-            maze[3][i] = 0
-            maze[i][7] = 0
-            maze[7][i] = 0
+        // Double check start and end are open
+        maze[1][1] = 0
+        maze[MAZE_SIZE - 2][MAZE_SIZE - 2] = 0
+
+        invalidate()
+    }
+
+    private fun carveMazeDFS(x: Int, y: Int, random: Random) {
+        maze[x][y] = 0
+        val dirs = mutableListOf(Pair(0, -2), Pair(0, 2), Pair(-2, 0), Pair(2, 0))
+        dirs.shuffle(random)
+
+        for (dir in dirs) {
+            val nx = x + dir.first
+            val ny = y + dir.second
+            if (nx > 0 && nx < MAZE_SIZE && ny > 0 && ny < MAZE_SIZE && maze[nx][ny] == 1) {
+                // Carve wall between
+                maze[x + dir.first / 2][y + dir.second / 2] = 0
+                carveMazeDFS(nx, ny, random)
+            }
         }
     }
 
     fun movePlayer(dx: Int, dy: Int): Boolean {
-        val newX = (playerX + dx).coerceIn(0, 9)
-        val newY = (playerY + dy).coerceIn(0, 9)
+        val newX = (playerX + dx).coerceIn(0, MAZE_SIZE - 1)
+        val newY = (playerY + dy).coerceIn(0, MAZE_SIZE - 1)
 
         if (maze[newX][newY] == 0) {
             playerX = newX
@@ -102,30 +116,35 @@ class MazeView(context: Context, attrs: AttributeSet? = null) : View(context, at
     }
 
     fun reset() {
-        playerX = 0
-        playerY = 0
+        playerX = 1
+        playerY = 1
         invalidate()
     }
+
+    fun getLevel(): Int = level
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        cellSize = (width - paddingLeft - paddingRight) / 10f
+        if (width == 0 || height == 0) return
+
+        // The layout calculates cell size by dividing total available view width by maze size.
+        // A small MAZE_SIZE (9) automatically guarantees huge visual blocks!
+        cellSize = (width - paddingLeft - paddingRight) / MAZE_SIZE.toFloat()
+        starPaint.textSize = cellSize * 0.7f
 
         // Draw grid
-        for (i in 0 until 10) {
-            for (j in 0 until 10) {
+        for (i in 0 until MAZE_SIZE) {
+            for (j in 0 until MAZE_SIZE) {
                 val left = paddingLeft + i * cellSize
                 val top = paddingTop + j * cellSize
                 val right = left + cellSize
                 val bottom = top + cellSize
 
                 if (maze[i][j] == 1) {
-                    // Draw wall - dark filled rectangle
                     canvas.drawRect(left + 1, top + 1, right - 1, bottom - 1, wallPaint)
                     canvas.drawRect(left + 1, top + 1, right - 1, bottom - 1, borderPaint)
                 } else {
-                    // Draw path - white filled rectangle with border
                     canvas.drawRect(left + 1, top + 1, right - 1, bottom - 1, pathPaint)
                     canvas.drawRect(left + 1, top + 1, right - 1, bottom - 1, borderPaint)
                 }
@@ -134,20 +153,13 @@ class MazeView(context: Context, attrs: AttributeSet? = null) : View(context, at
 
         // Draw star
         val starLeft = paddingLeft + starX * cellSize + cellSize / 2
-        val starTop = paddingTop + starY * cellSize + cellSize / 2 + 12
+        val starTop = paddingTop + starY * cellSize + cellSize / 2 + cellSize * 0.25f
         canvas.drawText("⭐", starLeft, starTop, starPaint)
 
-        // Draw player - larger cyan circle
+        // Draw player
         val playerLeft = paddingLeft + playerX * cellSize + cellSize / 2
         val playerTop = paddingTop + playerY * cellSize + cellSize / 2
         canvas.drawCircle(playerLeft, playerTop, cellSize / 3, playerPaint)
-
-        // Add white border to player for better visibility
-        val playerBorder = Paint().apply {
-            color = 0xFFFFFFFF.toInt()
-            strokeWidth = 2f
-            style = Paint.Style.STROKE
-        }
         canvas.drawCircle(playerLeft, playerTop, cellSize / 3, playerBorder)
     }
 }
